@@ -1,0 +1,331 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ds</groupId>
+  <artifactId>kindleweb</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>spring2 Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  <properties>  
+     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+     <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>  
+     <spring.version>4.1.2.RELEASE</spring.version>
+     <mybatis.spring>1.3.0</mybatis.spring>
+     <mybatis.version>3.2.1</mybatis.version>  
+  </properties>
+	 
+   <dependencies>
+         <!-- <dependency>
+         	<groupId>com.ds</groupId>
+			<artifactId>utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/libs/utils-0.0.1.jar</systemPath>
+         </dependency> -->
+         <dependency>
+        	 <groupId>com.ds</groupId>
+         	<artifactId>utils</artifactId>
+         	<version>0.0.1-jar-with-dependencies</version>
+         	<scope>system</scope>
+			<systemPath>${basedir}/libs/utils-0.0.1-jar-with-dependencies.jar</systemPath>
+         </dependency>
+      <!-- servlet -->
+	    <dependency>
+	        <groupId>javax.servlet</groupId>
+	        <artifactId>javax.servlet-api</artifactId>
+	        <version>3.1.0</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>  
+            <groupId>javax.servlet.jsp</groupId>  
+            <artifactId>jsp-api</artifactId>  
+            <version>2.2</version>  
+            <scope>provided</scope>  
+        </dependency>
+	    <dependency>
+		   <groupId>javax.servlet.jsp.jstl</groupId>
+    	   <artifactId>jstl-api</artifactId>
+           <version>1.2</version>
+           <exclusions>
+	           	<exclusion>
+	           	<groupId>javax.servlet</groupId>
+	           	<artifactId>servlet-api</artifactId>
+	           	</exclusion>
+				<exclusion>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				</exclusion>
+		   </exclusions>
+		</dependency>
+		
+        <!-- junit -->  
+        <dependency>  
+            <groupId>junit</groupId>  
+            <artifactId>junit</artifactId>  
+            <version>4.12-beta-3</version>  
+            <scope>test</scope>  
+        </dependency>
+        
+        <!-- log4j -->  
+        <dependency>  
+            <groupId>log4j</groupId>  
+            <artifactId>log4j</artifactId>  
+            <version>1.2.17</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.slf4j</groupId>  
+            <artifactId>slf4j-api</artifactId>  
+            <version>1.7.10</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.slf4j</groupId>  
+            <artifactId>slf4j-log4j12</artifactId>  
+            <version>1.7.10</version>  
+        </dependency>
+        
+        <!-- spring 的基本依赖 开始 -->  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-core</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-expression</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-beans</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-aop</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-context</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-context-support</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-tx</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-web</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-jdbc</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-webmvc</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-aspects</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-test</artifactId>  
+            <version>${spring.version}</version>  
+        </dependency>  
+        <!-- spring 的基本依赖 结束 -->  
+        
+        <!-- mybatis -->
+         <dependency>  
+	         <groupId>org.mybatis</groupId>
+	    	 <artifactId>mybatis</artifactId>
+	         <version>${mybatis.version}</version>
+         </dependency> 
+         <dependency>  
+	         <groupId>org.mybatis</groupId>
+	   		 <artifactId>mybatis-spring</artifactId>
+	    	 <version>${mybatis.spring}</version>
+    	 </dependency> 
+    	 
+        <!-- mybatis end -->
+ 		<!-- jdbc -->
+ 		<dependency>  
+            <groupId>mysql</groupId>  
+            <artifactId>mysql-connector-java</artifactId>  
+            <version>5.1.34</version>
+            <scope>compile</scope>  
+        </dependency>
+ 		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.4</version>
+		</dependency>
+	 	<!-- jdbc end -->
+        <dependency>  
+            <groupId>org.aspectj</groupId>  
+            <artifactId>aspectjweaver</artifactId>  
+            <version>1.8.1</version>  
+        </dependency>  
+
+        <dependency>  
+            <groupId>commons-fileupload</groupId>  
+            <artifactId>commons-fileupload</artifactId>  
+            <version>1.3.1</version>  
+        </dependency>  
+        <dependency>
+	    	<groupId>commons-logging</groupId>
+	    	<artifactId>commons-logging</artifactId>
+	    	<version>1.1.3</version>
+        </dependency>
+        <dependency>  
+            <groupId>commons-lang</groupId>  
+            <artifactId>commons-lang</artifactId>  
+            <version>2.6</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>commons-codec</groupId>  
+            <artifactId>commons-codec</artifactId>  
+            <version>1.9</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>org.apache.httpcomponents</groupId>  
+            <artifactId>httpclient</artifactId>  
+            <version>4.5</version>  
+        </dependency>
+        <!-- json -->  
+        <dependency>  
+            <groupId>org.codehaus.jackson</groupId>  
+            <artifactId>jackson-mapper-asl</artifactId>  
+            <version>1.9.13</version>  
+        </dependency>
+        
+         <dependency>  
+            <groupId>com.alibaba</groupId>  
+            <artifactId>fastjson</artifactId>  
+            <version>1.1.41</version>  
+        </dependency>
+        <dependency>
+    		<groupId>com.fasterxml.jackson.core</groupId>
+    		<artifactId>jackson-core</artifactId>
+   			<version>2.8.5</version>
+		</dependency>
+        <dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.8.5</version>
+		</dependency>
+        <!-- json end -->
+        <dependency>
+    	    <groupId>commons-fileupload</groupId>
+  		    <artifactId>commons-fileupload</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+  </dependencies>
+  <build>  
+        <plugins>  
+            <plugin>  
+                <artifactId>maven-compiler-plugin</artifactId>  
+                <version>2.3.2</version>  
+                <configuration>  
+                    <source>1.7</source>  
+                    <target>1.7</target>  
+                </configuration>  
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>*.properties</exclude>
+                        <exclude>*.txt</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>  
+            <plugin>  
+                <artifactId>maven-war-plugin</artifactId>  
+                <version>2.2</version>  
+                <configuration>
+                	<!-- modify work directory -->
+                    <webappDirectory>${basedir}/src/main/webapp</webappDirectory>
+                    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+                    <version>3.0</version>  
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>WEB-INF/lib/*.jar,WEB-INF/classes/**</packagingExcludes>
+                    <webResources>
+                    	<resource>
+                    		<directory>libs</directory>
+                    		<targetPath>WEB-INF/lib</targetPath>
+                    		<includes>
+                    			<include>**/*.jar</include>
+                    		</includes>
+                    	</resource>
+                    </webResources>
+                </configuration>  
+            </plugin>
+             
+        </plugins> 
+         <pluginManagement>
+        	<plugins>
+        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        		<plugin>
+        			<groupId>org.eclipse.m2e</groupId>
+        			<artifactId>lifecycle-mapping</artifactId>
+        			<version>1.0.0</version>
+        			<configuration>
+        				<lifecycleMappingMetadata>
+        					<pluginExecutions>
+        						<pluginExecution>
+        							<pluginExecutionFilter>
+        								<groupId>
+        									org.apache.maven.plugins
+        								</groupId>
+        								<artifactId>
+        									maven-jar-plugin
+        								</artifactId>
+        								<versionRange>
+        									[2.5,)
+        								</versionRange>
+        								<goals>
+        									<goal>jar</goal>
+        								</goals>
+        							</pluginExecutionFilter>
+        							<action>
+        								<ignore></ignore>
+        							</action>
+        						</pluginExecution>
+        					</pluginExecutions>
+        				</lifecycleMappingMetadata>
+        			</configuration>
+        		</plugin>
+        	</plugins>
+        </pluginManagement> 
+        <finalName>${project.artifactId}</finalName>  
+    </build>  
+</project>

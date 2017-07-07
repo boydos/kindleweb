@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.template.dao.UserDao">
+	<select id="getUsers" resultType="user">
+		select * from user Order by date desc limit #{start},#{count}
+	</select>
+	<select id="getUsersByAccount" resultType="user">
+		select * from user where account = #{account} Order by date desc
+	</select>
+	<select id="getUsersByNickName" resultType="user">
+		select * from user where nickname = #{nickname} Order by date desc
+	</select>
+	<select id="login" resultType="user">
+		select * from user where account = #{account} and password = #{password} Order by date desc
+	</select>
+	<select id="getUserSize" resultType="java.lang.Integer">
+		select count(*) from user
+	</select>
+	
+	<insert id="createUser" parameterType="user">
+	    insert into user(account,nickname,password,roleId,date) values(#{account},#{nickname},#{password},#{roleId},#{date})
+	</insert>
+	
+	<delete id="deleteUser" parameterType="long" >
+		delete from user where id = #{id};
+	</delete>
+	<select id="getRoles" resultType="role">
+		select * from roles
+	</select>
+	<insert id="createRole" parameterType="role">
+		<selectKey resultType="java.lang.Short" order="AFTER" keyProperty="id">
+			SELECT max(id)+1 AS id from roles
+		</selectKey>
+	    insert into roles(id,name,date) values(#{id},#{name},#{date})
+	</insert>
+	<delete id="deleteRole" parameterType="long" >
+		delete from roles where id = #{id};
+	</delete>
+	
+	<update id="updateUser" parameterType="user">
+	   update user 
+	   <set>
+	       <if test="nickname != null ">
+	          nickname = #{nickname},
+	       </if>
+	       <if test="account != null ">
+	          account = #{account},
+	       </if>
+	       <if test="password != null ">
+	          password = #{password},
+	       </if>
+	        <if test="roleId != null and roleId != -1 ">
+	          roleId = #{roleId},
+	       </if>
+	       <if test="date != null ">
+	          date = #{date}
+	       </if>
+	   </set>
+	   where id = #{id}
+	</update>
+	<update id="updateRole" parameterType="role">
+	   update roles 
+	   <set>
+	       <if test="name != null ">
+	          name = #{name},
+	       </if>
+	       <if test="date != null ">
+	          date = #{date}
+	       </if>
+	   </set>
+	   where id = #{id}
+	</update>
+</mapper>

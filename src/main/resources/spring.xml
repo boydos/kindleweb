@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:ws="http://jax-ws.dev.java.net/spring/core"
+	xmlns:wss="http://jax-ws.dev.java.net/spring/servlet"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans   
+            http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   
+            http://www.springframework.org/schema/mvc   
+            http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd   
+            http://www.springframework.org/schema/context   
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd   
+            http://www.springframework.org/schema/aop   
+            http://www.springframework.org/schema/aop/spring-aop-4.0.xsd   
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd ">  
+    <!--配置基于注解的AOP  -->
+   <!-- <aop:aspectj-autoproxy proxy-target-class="true"/> -->
+   <!-- 支持注解 -->
+   <context:annotation-config/>
+    <!-- 扫描service、dao组件 -->  
+    <context:component-scan base-package="com.ds.template.dao" />  
+    <context:component-scan base-package="com.ds.template.service" />
+    
+    <!-- 分解配置 jdbc.properites -->  
+    <context:property-placeholder location="classpath:jdbc.properties" /> 
+
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+   	<property name="driverClassName" value="${jdbc.driverClassName}"/>
+   	<property name="url" value="${jdbc.url}"/>
+   	<property name="username" value="${jdbc.username}"/>
+   	<property name="password" value="${jdbc.password}"/>
+   	<property name="maxActive" value="${jdbc.maxActive}"/>
+   	<property name="maxIdle" value="${jdbc.maxIdle}"/>
+   	<property name="testOnBorrow" value="true"/>
+   	<property name="testWhileIdle" value="true"/>
+   	<property name="validationQuery" value="select 1"/>
+  </bean>
+  
+    <!-- sessionFactory 将spring和mybatis整合 -->  
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
+        <property name="dataSource" ref="dataSource" />  
+        <property name="configLocation" value="classpath:spring-mybatis.xml" />  
+        <property name="mapperLocations" value="classpath:com/ds/template/mapper/*.xml" />  
+    </bean>  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.ds.template.dao" />  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />  
+    </bean>  
+  
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/> 
+</beans>              
