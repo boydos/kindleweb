@@ -5,10 +5,10 @@
                       http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0"
   metadata-complete="true">
-  <display-name>Web Template</display-name>
+  <display-name>Web Kindle</display-name>
   <context-param>
   	<param-name>webAppRootKey</param-name>
-  	<param-value>kindleweb</param-value>
+  	<param-value>web-kindle</param-value>
   </context-param>
   <!-- spring config -->
   <context-param>
@@ -45,7 +45,7 @@
   <!-- boot start -->
   <servlet>
    	  <servlet-name>initWebServlet</servlet-name>
-	  <servlet-class>com.ds.template.InitWebServlet</servlet-class>
+	  <servlet-class>com.ds.kindle.InitWebServlet</servlet-class>
 	  <load-on-startup>1</load-on-startup>
   </servlet>
   <!-- boot end -->
@@ -68,11 +68,11 @@
   <!-- base service config -->
   <servlet>
   	  <servlet-name>pictrueServlet</servlet-name>
-  	  <servlet-class>com.sdt.platform.PictureServlet</servlet-class>
+  	  <servlet-class>com.ds.kindle.PictureServlet</servlet-class>
   </servlet>
   <servlet>
   	  <servlet-name>downloadServlet</servlet-name>
-  	  <servlet-class>com.sdt.platform.DownloadServlet</servlet-class>
+  	  <servlet-class>com.ds.kindle.DownloadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
   	<servlet-name>downloadServlet</servlet-name>

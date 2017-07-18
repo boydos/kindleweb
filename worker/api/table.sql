@@ -12,6 +12,8 @@ create table user(
   primary key(id)
 )DEFAULT CHARSET=UTF8;
 
+insert into user(account,password,nickname,roleId) values ("admin","4QrcOUm6Wau+VuBX8g+IPg==","SuperMan",2);
+
 drop table if exists roles;
 create table roles(
   id int not null,

@@ -17,7 +17,7 @@ function BannerJs () {
 	this.loginOutUrl="user/loginOut";
 	this.verifyTokenUrl="user/verifyToken"
 	this.goLogin="pages/login.jsp"
-	this.tokenKey="user_token_for_zongheng";
+	this.user = JSON.parse($.cookie("user_token_for_zongheng")||"{}")||{};
 }
 BannerJs.prototype = {
 		bindEvent:function () {
@@ -28,20 +28,15 @@ BannerJs.prototype = {
 			window.location.href = this.goLogin;
 		},
 		loginOut : function () {
-			var token = $.cookie(this.tokenKey);
-			if(token!=null) {
-				$.cookie(this.tokenKey,null);
-			}
-			ds.post(this.loginOutUrl,{token:token},$.hitch(this,this.goLoginJsp),$.hitch(this,this.goLoginJsp));
+			$.cookie("user_token_for_zongheng",null);
+			ds.post(this.loginOutUrl,{token:this.user["token"]},$.hitch(this,this.goLoginJsp),$.hitch(this,this.goLoginJsp));
 		},
 		verify:function () {
-			var token = $.cookie(this.tokenKey);
-			if(token!=null) {
-				ds.post(this.verifyTokenUrl,{token:token},$.hitch(this,this.verifySuccess),$.hitch(this,this.goLoginJsp))
+			if(this.user!=null) {
+				ds.post(this.verifyTokenUrl,{token:this.user["token"]},$.hitch(this,this.verifySuccess),$.hitch(this,this.goLoginJsp))
 			} else this.goLoginJsp();
 		},
 		verifySuccess : function (data) {
-			console.info(data);
 			if(data.s==1) {
 				this.domName.html(data["nickname"]);
 			} else {

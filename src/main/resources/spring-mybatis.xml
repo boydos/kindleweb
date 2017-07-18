@@ -4,6 +4,6 @@
 <configuration>  
     <!-- 暂时不需要其他配置-->  
     <typeAliases>
-    	<package name="com.ds.template.pojo"/>
+    	<package name="com.ds.kindle.pojo"/>
     </typeAliases>
 </configuration>    

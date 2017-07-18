@@ -22,8 +22,8 @@
    <!-- 支持注解 -->
    <context:annotation-config/>
     <!-- 扫描service、dao组件 -->  
-    <context:component-scan base-package="com.ds.template.dao" />  
-    <context:component-scan base-package="com.ds.template.service" />
+    <context:component-scan base-package="com.ds.kindle.dao" />  
+    <context:component-scan base-package="com.ds.kindle.service" />
     
     <!-- 分解配置 jdbc.properites -->  
     <context:property-placeholder location="classpath:jdbc.properties" /> 
@@ -44,10 +44,10 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
         <property name="dataSource" ref="dataSource" />  
         <property name="configLocation" value="classpath:spring-mybatis.xml" />  
-        <property name="mapperLocations" value="classpath:com/ds/template/mapper/*.xml" />  
+        <property name="mapperLocations" value="classpath:com/ds/kindle/mapper/*.xml" />  
     </bean>  
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
-        <property name="basePackage" value="com.ds.template.dao" />  
+        <property name="basePackage" value="com.ds.kindle.dao" />  
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />  
     </bean>  
   

@@ -29,7 +29,9 @@ UserList.prototype = {
 			this.tablejs.pushHead("角色","roleId");
 			this.tablejs.pushHead("日期","date");
 			this.tablejs.pushHead("操作","operation")
+			this.configHelper.setServerUrl(this.readUserListUrl);
 			this.configHelper.setFenYe(true);
+			this.configHelper.setSearchEnable(false);
 			this.configHelper.setCheckBox(false,"checkbox", true);// 设置启用 checkbox
 			var btnHelper = new TableJsKeyValueHelper();
 			btnHelper.pushValue("id", ["-1"],false);
@@ -159,7 +161,7 @@ UserList.prototype = {
 			ds.post(this.deleteUserUrl,data,$.hitch(this,this.success),$.hitch(this,this.close));
 		},
 		getUsers:function() {
-			var _this= this;
+			/*var _this= this;
 			this.loadingHelper.show("正在获取用户信息...");
 			ds.post(this.readUserListUrl,{},function(data){
 				if(data.s==1) {
@@ -170,7 +172,8 @@ UserList.prototype = {
 			},function(error){
 				ds.log(error);
 				_this.loadingHelper.hide();
-			});
+			});*/
+			this.tablejs.show(true);
 		},
 		success : function (data) {
 			this.loadingHelper.hide();

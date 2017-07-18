@@ -72,6 +72,7 @@ public class UserController {
 			response.set("token", token);
 			response.set("account", account);
 			response.set("nickname", user.getString("nickname"));
+			response.set("roleId", user.getString("roleId"));
 			response.set("id", user.getString("id"));
 			String result = response.toJson();
 			MemStore.put(tempKey, token);

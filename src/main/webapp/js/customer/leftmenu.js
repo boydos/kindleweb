@@ -14,6 +14,7 @@ function LeftMenu (id) {
 	     ];
 	this.currentUrl=window.location.pathname;
 	this.defaultUrl = this.menuData[0]["url"]||"pages/home.jsp";
+	this.user = JSON.parse($.cookie("user_token_for_zongheng")||"{}")||{};
 }
 LeftMenu.prototype ={
 		initTogglerButton : function () {

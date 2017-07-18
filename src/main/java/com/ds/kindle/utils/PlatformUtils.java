@@ -9,7 +9,7 @@ public class PlatformUtils {
 	private static ResourceBundle serverConfig = null;
 	private static String baseDir = null;
 	static {
-		serverConfig = ResourceBundle.getBundle(IConstrants.WEBROOT);
+		serverConfig = ResourceBundle.getBundle("kindle");
 		baseDir = serverConfig.getString("base.dir");
 	}
 	public static void init() {
