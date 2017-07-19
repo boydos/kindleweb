@@ -6,17 +6,19 @@ import com.ds.json.JsonModel;
 
 @Alias("user")
 public class User {
-	private long id=-1L;
+	private int id=-1;
 	private String nickname;
 	private String account;
 	private String password;
-	private long roleId =-1L;
+	private int roleId =-1;
+	private int level=-1;
+	private String levelDate;
 	private String date;
 	private JsonModel model = new JsonModel();
 	public long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getNickname() {
@@ -40,8 +42,21 @@ public class User {
 	public long getRoleId() {
 		return roleId;
 	}
-	public void setRoleId(long roleId) {
+	public void setRoleId(int roleId) {
 		this.roleId = roleId;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public String getLevelDate() {
+		return levelDate;
+	}
+	public void setLevelDate(String levelDate) {
+		this.levelDate = levelDate;
 	}
 	public String getDate() {
 		return date;
@@ -54,7 +69,8 @@ public class User {
 		model.set("id", id);
 		model.set("nickname", nickname);
 		model.set("account", account);
-		//model.set("password", password);
+		model.set("level", level);
+		model.set("levelDate", levelDate);
 		model.set("roleId", roleId);
 		model.set("date", date);
 		return model;

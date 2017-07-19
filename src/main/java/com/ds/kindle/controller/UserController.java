@@ -105,25 +105,34 @@ public class UserController {
 	@RequestMapping(value="register",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public String register(User user) {
-		user.setRoleId(0);
+		user.setRoleId(0); //普通用户
+		return createUser(user);
+	}
+	@RequestMapping(value="regWXUser",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ResponseBody
+	public String regWXUser(User user) {
+		user.setRoleId(1);//微信用户
 		return createUser(user);
 	}
 	@RequestMapping(value="createUser",method=RequestMethod.POST,produces="application/json;charset=UTF-8")
 	@ResponseBody
 	public String createUser(User user) {
-		if(StringUtils.isEmpty(user.getAccount())) {
-			return JsonHelper.getError("用户账号不能为空");
-		}
-		if(StringUtils.isEmpty(user.getPassword())) {
-			return JsonHelper.getError("用户密码不能为空");
-		}
+		
 		if(StringUtils.isEmpty(user.getNickname())) {
 			return JsonHelper.getError("用户昵称不能为空");
+		}
+		if(StringUtils.isEmpty(user.getAccount())) {
+			return JsonHelper.getError("用户账号不能为空");
 		}
 		if(user.getRoleId() == -1) {
 			return JsonHelper.getError("用户角色不能为空");
 		}
-		user.setPassword(StringUtils.EncoderByMd5(user.getPassword())); //md5 
+		if(user.getRoleId()!=1) {
+			if(StringUtils.isEmpty(user.getPassword())) {
+				return JsonHelper.getError("用户密码不能为空");
+			}
+			user.setPassword(StringUtils.EncoderByMd5(user.getPassword()));
+		} 
 		int ret =userService.createUser(user);
 		if(ret>0) {
 			return JsonHelper.getSuccess("用户注册成功");
@@ -143,7 +152,7 @@ public class UserController {
 			return JsonHelper.getError("用户角色不能为空");
 		}
 		Log.d(String.format("updateUser id=%s nick=%s roleId=%s", id,nickname,roleId));
-		int ret=userService.updateUser(Long.parseLong(id),nickname,Long.parseLong(roleId));
+		int ret=userService.updateUser(Integer.parseInt(id),nickname,Integer.parseInt(roleId));
 		if(ret>0) {
 			return JsonHelper.getSuccess("用户更新成功");
 		}

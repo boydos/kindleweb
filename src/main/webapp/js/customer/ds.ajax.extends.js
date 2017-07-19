@@ -50,4 +50,13 @@
 		var reg=/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
 		return reg.test(email);
 	}
+	ds.changeToNV=function(data,name,value) {
+		if(data==null||data.length==0)return [];
+		var temp =[];
+		for(var i in data) {
+			var item=data[i];
+			temp.push({"name":item[name],"value":item[value]});
+		}
+		return temp;
+	}
 })(jQuery);

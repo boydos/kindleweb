@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ds.kindle.utils.BookUtils;
 import com.ds.kindle.utils.PlatformUtils;
 import com.ds.utils.FileUtils;
 import com.ds.utils.StringUtils;
 
 public class PictureServlet extends HttpServlet {
 	private static final long serialVersionUID = -3546576879872348L;
-	private static String ImageDirPath =PlatformUtils.getFileDir()+"/imgs";
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -29,11 +29,9 @@ public class PictureServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		 String type=req.getParameter("type");
-		 if("app".equalsIgnoreCase(type)){
-			// ImageDirPath="";
-		 } else if("video".equalsIgnoreCase(type)){
-		 } else if("live".equalsIgnoreCase(type)){
-		 }else {
+		 String ImageDirPath =PlatformUtils.getFileDir()+"/imgs";
+		 if("book".equalsIgnoreCase(type)){
+			 ImageDirPath=BookUtils.getBookImgDir();
 		 }
 		try {
 			String page = req.getPathInfo();

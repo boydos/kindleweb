@@ -33,14 +33,17 @@ public class UserService {
 	}
 	public int createUser(User user) {
 		if(user ==null) return -1;
-		user.setDate(MemStore.getNowDateTime());
+		user.setLevel(0);
+		String date = MemStore.getNowDateTime();
+		user.setLevelDate(date);
+		user.setDate(date);
 		return userDao.createUser(user);
 	}
 	public int deleteUser(long id) {
 		if(id <=-1) return -1;
 		return userDao.deleteUser(id);
 	}
-	public int updateUser(long id,String nickname,long roleId) {
+	public int updateUser(int id,String nickname,int roleId) {
 		User user = new User();
 		user.setId(id);
 		user.setNickname(nickname);
@@ -49,7 +52,11 @@ public class UserService {
 	}
 	public int updateUser(User user) {
 		if(user==null||user.getId()<=-1) return -1;
-		user.setDate(MemStore.getNowDateTime());
+		String date = MemStore.getNowDateTime();
+		if(user.getLevel()>-1) {
+			user.setLevelDate(date);
+		}
+		user.setDate(date);
 		return userDao.updateUser(user);
 	}
 	public List<JsonModel> getUsers(int start,int count) {

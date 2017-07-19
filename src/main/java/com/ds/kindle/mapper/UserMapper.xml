@@ -18,7 +18,7 @@
 	</select>
 	
 	<insert id="createUser" parameterType="user">
-	    insert into user(account,nickname,password,roleId,date) values(#{account},#{nickname},#{password},#{roleId},#{date})
+	    insert into user(account,nickname,password,roleId,level,levelDate,date) values(#{account},#{nickname},#{password},#{roleId},#{level},#{levelDate},#{date})
 	</insert>
 	
 	<delete id="deleteUser" parameterType="long" >
@@ -51,6 +51,12 @@
 	       </if>
 	        <if test="roleId != null and roleId != -1 ">
 	          roleId = #{roleId},
+	       </if>
+	        <if test="level != null and level != -1 ">
+	          level = #{level},
+	       </if>
+	        <if test="levelDate != null">
+	          levelDate = #{levelDate},
 	       </if>
 	       <if test="date != null ">
 	          date = #{date}

@@ -29,7 +29,4 @@ public class PlatformUtils {
     public static String getXMLDir() {
     	return baseDir + "/xml/";
     }
-    public static String getVideoDir() {
-    	return serverConfig.getString("video.path");
-    }
 }

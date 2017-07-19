@@ -8,10 +8,7 @@ function LeftMenu (id) {
 	this.parentDom=$("#"+id)
 	this.menuDom=$('<ul class="page-sidebar-menu"></ul>');
 	
-	this.menuData =[
-	           { url:"pages/home.jsp",title:"首页",icon:"icon-home"},
-	           { title:"用户中心",icon:"icon-cogs",sub:[ {url:"pages/userlist.jsp",title:"用户管理"}]}
-	     ];
+	this.menuData =[{ url:"pages/home.jsp",title:"首页",icon:"icon-home"}];
 	this.currentUrl=window.location.pathname;
 	this.defaultUrl = this.menuData[0]["url"]||"pages/home.jsp";
 	this.user = JSON.parse($.cookie("user_token_for_zongheng")||"{}")||{};
@@ -38,7 +35,19 @@ LeftMenu.prototype ={
 		setData: function (data) {
 			this.menuData = data;
 		},
+		initMenuData : function() {
+			var roleId = this.user["roleId"];
+			var userCenter ={ title:"用户中心",icon:"icon-cogs",sub:[]};
+			var userManager = {url:"pages/userlist.jsp",title:"用户管理"};
+			var bookManager = {url:"pages/bookmanager.jsp",title:"书籍管理"};
+			var bookTypeManager = {url:"pages/booktype.jsp",title:"书籍分类"};
+			userCenter["sub"].push(userManager);
+			userCenter["sub"].push(bookManager);
+			userCenter["sub"].push(bookTypeManager);
+			this.menuData.push(userCenter);
+		},
 		initMenu : function() {
+			this.initMenuData();
 			$.each(this.menuData,$.hitch(this,this.hitchGetMenu,this.menuDom));
 			
 			if(this.menuDom.find(".active").length==0) {
