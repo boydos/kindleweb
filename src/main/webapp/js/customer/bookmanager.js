@@ -40,8 +40,8 @@ BookManager.prototype ={
 			this.saveBtn.bind("click",$.hitch(this,this.saveDialog));
 		},
 		reset: function () {
-			this.img=null;
-			this.filepath =null;
+			this.img="##byds##";
+			this.filepath ="##byds##";
 		},
 		setImgUrl: function(img) {
 			this.img = img;
@@ -118,6 +118,14 @@ BookManager.prototype ={
 				ds.log("请选择书籍分类");
 				return null;
 			}
+			if(this.img=="##byds##") {
+				ds.log("请选择书籍封面");
+				return null;
+			}
+			if(this.filepath=="##byds##") {
+				ds.log("请选择书籍文件");
+				return null;
+			}
 			return {
 				name : 	bookName,
 				subtitle: subName,
@@ -163,7 +171,9 @@ BookManager.prototype ={
 				url:"upload",
 				dataType: 'json',
 				formData :{type:"img"},
+				acceptFileTypes: /(\.|\/)(png|jpg|jpeg|gif)$/i,
 				add : function(e,data) {
+					_this.setImgUrl(null);
 					loadImage(
 							data["files"][0],
 						    function (img) {
@@ -189,6 +199,10 @@ BookManager.prototype ={
 			        	   _this.saveSubmit();
 			           }
 			    },
+			    fail : function(e,data) {
+			    	 _this.processHelper.hide();
+			    	 ds.log("封面上传失败...")
+			    },
 				progressall: function (e, data) {
 			        var pgress = parseInt(data.loaded / data.total * 100, 10);
 			        
@@ -209,6 +223,7 @@ BookManager.prototype ={
 				var file = data["files"][0];
 				if(file !=null) {
 					var info ="文件名称:"+file["name"]+" 文件大小:"+ds.formatByteSize(file["size"]) +" 文件类型:"+file["type"];
+					_this.setFileUrl(null);
 					infoDom.html(info);
 				}
 				formDom.submit = function(){
@@ -242,16 +257,17 @@ BookManager.prototype ={
 	},
 	saveSubmit : function () {
 		console.info("saveSubmit",this.img,this.filepath);
-		if(ds.isEmpty(this.img)) {
+		if(ds.isEmpty(this.img)||this.img=="##byds##") {
 			return;
 		}
-		if(ds.isEmpty(this.filepath)) {
+		if(ds.isEmpty(this.filepath)||this.filepath=="##byds##") {
 			return;
 		}
 		var data = this.getInputData();
 		if(data == null) return;
 		data["img"] = this.img;
 		data["resources"] = this.filepath;
+		this.reset();
 		this.loadingHelper.show("正在保存书籍信息，请稍后...");
 	}
 }
