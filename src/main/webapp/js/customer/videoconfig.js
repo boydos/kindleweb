@@ -93,7 +93,7 @@ VideoConfig.prototype= {
 			if(span ==null) return;
 			span.empty();
 			var selectedDom=$('<select class="chosen" data-placeholder="请选择..." tabindex="1"></select>');
-			$("<option>").appendTo(this.domType);
+			$("<option>").appendTo(selectedDom);
 			for(var i in data||[]) {
 				var item = data[i];
 				var option=$("<option>");
