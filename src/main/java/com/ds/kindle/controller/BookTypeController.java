@@ -13,7 +13,7 @@ import com.ds.kindle.utils.JsonHelper;
 import com.ds.utils.StringUtils;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping("/booktype")
 public class BookTypeController {
 
 	@Autowired

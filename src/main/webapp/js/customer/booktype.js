@@ -9,11 +9,11 @@ function BookType() {
 	this.tablejs = new TableJs(this.domId);
 	this.loadingHelper = new LoadingHelper();
 	this.configHelper = new TableJsConfigHelper();
-	this.readTypeListUrl="book/getBookTypes";
-	this.createTypeUrl="book/createBookType";
-	this.modifyTypeUrl="book/modifyBookType";
-	this.deleteTypeUrl="book/deleteBookType";
-	this.getTypeByGroupUrl="book/getBookTypeByGroup";
+	this.readTypeListUrl="booktype/getBookTypes";
+	this.createTypeUrl="booktype/createBookType";
+	this.modifyTypeUrl="booktype/modifyBookType";
+	this.deleteTypeUrl="booktype/deleteBookType";
+	this.getTypeByGroupUrl="booktype/getBookTypeByGroup";
 	this.rootTypes = [{"name":"系统标签","id":0}];
 	
 	this.bookConfig = null;

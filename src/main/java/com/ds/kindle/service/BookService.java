@@ -17,6 +17,8 @@ import com.ds.utils.StringUtils;
 public class BookService {
 	@Autowired
 	private BookTypeDao bookTypeDao;
+	
+	//-------------bookType DAO-------
 	public List<JsonModel> getBookTypes() {
 		List<BookType> typeList = bookTypeDao.getBookTypes();
 		return changeBookType(typeList);
