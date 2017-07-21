@@ -4,6 +4,7 @@ $(function(){
 	bookmanager.load();
 });
 function BookManager() {
+	this.domId="booklistTab";
 	this.domBookName = $("#bookNameId");
 	this.domSubName = $("#bookSubNameId");
 	this.domAuthor=$("#bookAuthorId");
@@ -21,19 +22,42 @@ function BookManager() {
 	
 	this.saveBtn = $("#saveBtnId");
 	
+	this.tablejs = new TableJs(this.domId);
 	this.configHelper = new TableJsConfigHelper();
 	this.processHelper=new ProgressHelper();
 	this.loadingHelper = new LoadingHelper();
 	
 	this.readTypeListUrl="booktype/getBookTypes";
+	this.getBooksUrl = "book/getBooks";
+	this.createBookUrl = "book/register";
+	this.modifyBookUrl = "book/modify";
+	this.deleteBookUrl = "book/delete";
 	this.types = [];
 }
 BookManager.prototype ={
+		initTable : function () {
+			this.tablejs.pushHead("名称","name");
+			this.tablejs.pushHead("小标题","subtitle");
+			this.tablejs.pushHead("作者","author");
+			this.tablejs.pushHead("类型","type");
+			this.tablejs.pushHead("日期","date");
+			this.tablejs.pushHead("操作","operation")
+			this.configHelper.setServerUrl(this.getBooksUrl);
+			this.configHelper.setFenYe(true);
+			this.configHelper.setSearchEnable(true);
+			this.configHelper.setCheckBox(false,"checkbox", true);// 设置启用 checkbox
+			var btnHelper = new TableJsKeyValueHelper();
+			btnHelper.pushValue("id", ["-1"],false);
+			this.configHelper.pushBtn("operation", "编辑", $.hitch(this,this.editDialog), "btn-sm blue btn", btnHelper.getData()); 
+			this.configHelper.pushBtn("operation", "删除", $.hitch(this,this.deleteDialog), "btn-sm red btn", btnHelper.getData());
+			this.tablejs.setConfig( this.configHelper.getConfig());
+		},
 		init : function () {
 			this.reset();
 			this.bindEvent();
 			this.initPreviewImg(this.preViewFormDom,this.preViewFileDom,this.preViewImgDom);
 			this.initUpload(this.domFileForm,this.domFile,this.domInfo);
+			this.initTable();
 		},
 		bindEvent : function() {
 			this.saveBtn.unbind("click");
@@ -75,6 +99,7 @@ BookManager.prototype ={
 		},
 		load : function() {
 			this.getTypeList();
+			this.tablejs.show(true);
 		},
 		getTypeList:function() {
 			var _this= this;
@@ -130,8 +155,50 @@ BookManager.prototype ={
 				name : 	bookName,
 				subtitle: subName,
 				author :author,
-				typeId:typeId
+				typeId:typeId,
+				description: des
 			}
+		},
+		editDialog : function (evt) {
+			var book=this.tablejs.getValuesOn($(evt.target));
+			var option= {
+					  title:"编辑书籍",
+					  message:"请输入书籍相关信息",
+					  form :[{key:"id",label:"ID",type:"hidden",value:book["id"]},
+						     {key:"name",label:"名称",type:"text",value:book["name"]},
+						     {key:"subtitle",label:"小标题",type:"text",value:book["subtitle"]},
+						     {key:"author",label:"作者",type:"text",value:book["author"]},
+						     {key:"description",label:"简介",type:"textarea",value:book["description"]},
+					         {key:"typeId",label:"分类",selected:book["typeId"],type:"select",value:ds.changeToNV(this.types,"name","id")},
+					         {key:"date",label:"日期",type:"readonly",value:book["date"]}
+					        ],
+					  buttons:[{css:"btn blue",method:$.hitch(this,this.edit),name:"确定"}]
+					}
+			ds.showDialog(option);
+		},
+		deleteDialog : function (evt) {
+			var book=this.tablejs.getValuesOn($(evt.target));
+			var typeName ="---";
+			for(var i in this.types) {
+				if(book["typeId"] == this.types[i]["id"]) {
+					typeName= this.types[i]["name"];
+					break;
+				}
+			}
+			var option= {
+					  title:"编辑书籍",
+					  message:"请输入书籍相关信息",
+					  form :[{key:"id",label:"ID",type:"hidden",value:book["id"]},
+						     {key:"name",label:"名称",type:"readonly",value:book["name"]},
+						     {key:"subtitle",label:"小标题",type:"readonly",value:book["subtitle"]},
+						     {key:"author",label:"作者",type:"readonly",value:book["author"]},
+						     {key:"description",label:"简介",type:"readonly",value:book["description"]},
+					         {key:"type",label:"分类",type:"readonly",value:typeName},
+					         {key:"date",label:"日期",type:"readonly",value:book["date"]}
+					        ],
+					  buttons:[{css:"btn blue",method:$.hitch(this,this.deleteBook),name:"确定"}]
+					}
+			ds.showDialog(option);
 		},
 		saveDialog : function () {
 			var data = this.getInputData();
@@ -150,7 +217,8 @@ BookManager.prototype ={
 					  form :[{key:"name",label:"书籍名称",type:"readonly",value:data["name"]},
 						     {key:"subtitle",label:"副标题",type:"readonly",value:data["subtitle"]},
 						     {key:"author",label:"作者",type:"readonly",value:data["author"]},
-						     {key:"type",label:"类型",type:"readonly",value:typeName}
+						     {key:"type",label:"类型",type:"readonly",value:typeName},
+						     {key:"description",label:"简介",type:"readonly",value:data["description"]},
 					        ],
 					  buttons:[{css:"btn blue",method:$.hitch(this,this.save),name:"确定"}]
 					}
@@ -250,13 +318,44 @@ BookManager.prototype ={
 		        _this.processHelper.update(progress);
 		    }
 		});
-		/*this.domUpload.unbind("fileuploadsubmit");
-		this.domUpload.bind("fileuploadsubmit",function(e,data){
-			data.formData={type:"video",aspect:_this.domAspect.val()}
-		});*/
+	},
+	edit : function (data) {
+		if(ds.isEmpty(data["id"])) {
+			ds.log("书籍ID不能为空");
+			return false;
+		}
+		if(ds.isEmpty(data["name"])) {
+			ds.log("请输入书籍名称");
+			return false;
+		}
+		if(ds.isEmpty(data["subtitle"])) {
+			ds.log("请输入书籍小标题");
+			return false;
+		}
+		if(ds.isEmpty(data["author"])) {
+			ds.log("请输入书籍作者");
+			return false;
+		}
+		if(ds.isEmpty(data["description"])) {
+			ds.log("请输入数据简介");
+			return false;
+		}
+		if(ds.isEmpty(data["typeId"])||data["typeId"] == -1) {
+			ds.log("请选择书籍分类");
+			return false;
+		}
+		this.loadingHelper.show("正在修改书籍信息，请稍后...");
+		ds.post(this.modifyBookUrl,data,$.hitch(this,this.close),$.hitch(this,this.close));
+	},
+	deleteBook : function (data) {
+		if(ds.isEmpty(data["id"])) {
+			ds.log("书籍ID不能为空");
+			return false;
+		}
+		this.loadingHelper.show("正在删除书籍信息，请稍后...");
+		ds.post(this.deleteBookUrl,data,$.hitch(this,this.close),$.hitch(this,this.close));
 	},
 	saveSubmit : function () {
-		console.info("saveSubmit",this.img,this.filepath);
 		if(ds.isEmpty(this.img)||this.img=="##byds##") {
 			return;
 		}
@@ -269,5 +368,13 @@ BookManager.prototype ={
 		data["resources"] = this.filepath;
 		this.reset();
 		this.loadingHelper.show("正在保存书籍信息，请稍后...");
+		ds.post(this.createBookUrl,data,$.hitch(this,this.close),$.hitch(this,this.close));
+	},
+	close : function (data) {
+		this.loadingHelper.hide();
+		if(data["s"] == 1) {
+			this.load();
+		}
+		ds.log(data["i"]||"服务器忙...");
 	}
 }

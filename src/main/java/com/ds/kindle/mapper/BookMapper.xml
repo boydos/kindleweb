@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ds.kindle.dao.BookDao">
+	<resultMap type="com.ds.kindle.pojo.Book" id="book">
+			<id column="book_type" property="type" />
+			<id column="book_id" property="id" />
+			<id column="book_name" property="name" />
+			<id column="book_subtitle" property="subtitle" />
+			<id column="book_img" property="img" />
+			<id column="book_des" property="description" />
+			<id column="book_author" property="author" />
+			<id column="book_typeId" property="typeId" />
+			<id column="book_path" property="resources" />
+			<id column="book_follow" property="follow" />
+			<id column="book_date" property="date" />
+	</resultMap>
+	
+	<sql id="book_columns">
+		book.id  book_id,
+		book.name book_name,
+		book.subtitle book_subtitle,
+		book.img book_img,
+		book.description book_des,
+		book.author book_author,
+		book.typeId book_typeId,
+		book.resources book_path,
+		book.follow book_follow,
+		book.date book_date
+	</sql>
+	
+	<sql id="select_books">
+		select 
+		  booktype.name book_type,
+		  <include refid="book_columns"></include>
+		from book 
+		  LEFT join booktype on book.typeId = booktype.id 
+	</sql>
+	
+	<select id="getBook" parameterType="Integer" resultMap="book">
+		 <include refid="select_books" /> where book.id = #{id}
+	</select>
+	
+	<select id="getBooks" resultMap="book">
+		 <include refid="select_books" /> 
+		 <trim prefix="where" prefixOverrides="and">
+			 <if test="typeId != null and typeId !=-1">
+				 and book.typeId = #{typeId}
+			 </if>
+			 <if test="name != null and name != ''">
+				 and book.name like concat('%',#{name},'%')
+			 </if>
+			 <if test="author != null and author != ''">
+			     and book.author like concat('%',#{author},'%')
+			</if>
+		 </trim>
+		 <choose>
+		 	<when test="order == 1">
+		 		Order by book.follow desc
+		 	</when>
+		 	<otherwise>
+		 		Order by book.date desc
+		 	</otherwise>
+		 </choose>
+		 limit #{start},#{length}
+	</select>
+	<select id="getOrBooks" resultMap="book">
+		 <include refid="select_books" /> 
+		 <trim prefix="where" prefixOverrides="or">
+			 <if test="typeId != null and typeId !=-1">
+				 or book.typeId = #{typeId}
+			 </if>
+			 <if test="name != null and name != ''">
+				 or book.name like concat('%',#{name},'%')
+			 </if>
+			 <if test="author != null and author != ''">
+			     or book.author like concat('%',#{author},'%')
+			</if>
+		 </trim>
+		 <choose>
+		 	<when test="order == 1">
+		 		Order by book.follow desc
+		 	</when>
+		 	<otherwise>
+		 		Order by book.date desc
+		 	</otherwise>
+		 </choose>
+		 limit #{start},#{length}
+	</select>
+	<select id="getBookCount" resultType="Integer">
+		select count(*) from book
+		<trim prefix="where" prefixOverrides="and">
+			<if test="typeId != null and typeId !=-1">
+				 and book.typeId = #{typeId}
+			 </if>
+			 <if test="name != null and name != ''">
+				 and book.name like concat('%',#{name},'%')
+			 </if>
+			 <if test="author != null and author != ''">
+			     and book.author like concat('%',#{author},'%')
+			</if>
+		</trim>
+	</select>
+	<select id="getOrBookCount" resultType="Integer">
+		select count(*) from book
+		<trim prefix="where" prefixOverrides="or" suffixOverrides="and">
+			 <if test="typeId != null and typeId !=-1">
+				 book.typeId = #{typeId} and
+			 </if>
+			 <if test="name != null and name != ''">
+				 book.name like concat('%',#{name},'%')
+			 </if>
+			 <if test="author != null and author != ''">
+			     or book.author like concat('%',#{author},'%')
+			</if>
+		</trim>
+	</select>
+
+	<insert id="insert" parameterType="book">
+	    insert into book(name,subtitle,description,author,img,follow,resources,date,typeId)
+	    values(#{name},#{subtitle},#{description},#{author},#{img},#{follow},#{resources},#{date},#{typeId})
+	</insert>
+	
+	<update id="update" parameterType="book">
+	   update book 
+	   <set>
+	       <if test="name != null ">
+	          name = #{name},
+	       </if>
+	       <if test="subtitle != null ">
+	          subtitle = #{subtitle},
+	       </if>
+	       <if test="img != null ">
+	          img = #{img},
+	       </if>
+	       <if test="description != null ">
+	          description = #{description},
+	       </if>
+	       <if test="author != null ">
+	          author = #{author},
+	       </if>
+	       <if test="typeId != null and typeId != -1">
+	          typeId = #{typeId},
+	       </if>
+	       <if test="follow != null and follow != -1">
+	          follow = #{follow},
+	       </if>
+	       <if test="resources != null">
+	          resources = #{resources},
+	       </if>
+	       <if test="date != null ">
+	          date = #{date}
+	       </if>
+	   </set>
+	   where id = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="Integer" >
+		delete from book where id=#{id}
+	</delete>
+</mapper>
