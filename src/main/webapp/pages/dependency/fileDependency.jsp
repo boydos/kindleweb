@@ -13,3 +13,5 @@
 <script type="text/javascript" src="js/metronic/load-image.min.js"></script>
 
 <script type="text/javascript" src="js/bigknow.uploadfile.h5.handler.js"></script>
+<script type="text/javascript" src="js/customer/ds.imgfile.extends.js"></script>
+<script type="text/javascript" src="js/customer/ds.fileupload.extends.js"></script>

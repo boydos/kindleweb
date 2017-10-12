@@ -2,7 +2,7 @@
 function DSProcess(option) {
 	this.progressHelper = new ProgressHelper();
 	this.option =  {
-			update:"/platform/getProcess",
+			update:"getProcess",
 			url:null,
 			param:null,
 			title:"开始数据导入",
@@ -25,10 +25,6 @@ DSProcess.prototype = {
 		getProgress: function(uid) {
 			this.clearInterval();
 			sdt.post(this.option.update,{uid:uid},$.hitch(this,this.subSuccess),$.hitch(this,this.subError));
-		},
-		getReplaceMsg(msg,data) {
-			if(msg!=null) return msg.replace(this.countReg,data.size).replace(this.numReg,data.process).replace(this.perReg,value+"%");
-			else return null;
 		},
 		subSuccess:function(data) {
 			console.info("success",data);
